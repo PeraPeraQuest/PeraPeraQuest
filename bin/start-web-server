@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+# start-web-server
+
+cd export/web
+
+npx local-web-server \
+    --cors.embedder-policy "require-corp" \
+    --cors.opener-policy "same-origin" \
+    --directory "." \
+    --https

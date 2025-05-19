@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+# install_godot
+
+source dependencies.sh
+
+# if we don't find the godot engine executable
+if [ ! -f "${HOME}/godot" ]; then
+    # install it!
+    echo "Installing Godot Engine v${GODOT_VERSION}"
+    curl -L ${GODOT_ENGINE_URL} -o godot.zip
+    unzip -o godot.zip
+    mv -v Godot_v${GODOT_VERSION}-stable_linux.x86_64 "${HOME}/godot"
+    chmod +x "${HOME}/godot"
+    rm godot.zip
+    echo "Godot Engine Installed"
+else
+    # tell the user that we found the godot engine executable
+    echo "Godot Engine Detected"
+    echo "${HOME}/godot"
+    ls -l "${HOME}/godot"
+fi
+
+# if we don't find the godot export templates
+if [ ! -d "${HOME}/.local/share/godot/export_templates/${GODOT_VERSION}.stable" ]; then
+    echo "Installing Godot Export Templates v${GODOT_VERSION}"
+    curl -L ${GODOT_EXPORT_TEMPLATE_URL} -o export_templates.tpz
+    mkdir -p ${HOME}/.local/share/godot/export_templates/${GODOT_VERSION}.stable
+    unzip -j -o export_templates.tpz -d ${HOME}/.local/share/godot/export_templates/${GODOT_VERSION}.stable
+    rm export_templates.tpz
+    echo "Godot Export Templates Installed"
+else
+    # tell the user that we found the templates
+    echo "Godot Export Templates Detected"
+    echo "${HOME}/.local/share/godot/export_templates/${GODOT_VERSION}.stable"
+    ls -l "${HOME}/.local/share/godot/export_templates/${GODOT_VERSION}.stable"
+fi

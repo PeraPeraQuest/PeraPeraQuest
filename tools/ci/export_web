@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# export_web
+
+mkdir -p export/web
+godot --verbose --headless --export-release "Web" "export/web/index.html"
