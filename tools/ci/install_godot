@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 # install_godot
+set -euo pipefail
 
 source dependencies.sh
 
