@@ -4,7 +4,7 @@
 # run the PeraPeraQuest service in a container
 docker run \
     --detach \
-    --name=PeraPeraQuest \
-    --publish 8080:80 \
+    --name=game \
+    --publish 8080:8080 \
     --rm \
     peraperaquest:latest

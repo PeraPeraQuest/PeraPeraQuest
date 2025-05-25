@@ -23,9 +23,9 @@ RUN /tools/ci/export_web
 # ---------------------------------------------------------------------------
 # Publish a container image to serve PeraPeraQuest with nginx
 # ---------------------------------------------------------------------------
-FROM nginx:alpine AS game
+FROM nginx:stable-alpine-slim AS game
 RUN rm -rf /usr/share/nginx/html/*
 COPY --from=build /build/export/web /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/conf.d/default.conf
-EXPOSE 80
+EXPOSE 8080
 CMD ["nginx", "-g", "daemon off;"]
