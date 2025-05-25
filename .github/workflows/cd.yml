@@ -2,42 +2,41 @@ name: CD
 
 on:
   push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+    tags:
+      - '**'
 
 jobs:
-  export:
-    name: Export (Web)
+  publish:
+    name: "Publish Docker Image"
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout repository
+    - name: Checkout Project
       uses: actions/checkout@v4
 
-    - name: Cache Godot Engine
-      id: cache-engine
-      uses: actions/cache@v4
+    - name: Docker Meta
+      id: docker_meta
+      uses: docker/metadata-action@v4
       with:
-        path: ~/godot
-        key: ${{ runner.os }}-godot-engine-${{ hashFiles('dependencies.sh') }}
+        images: |
+          ghcr.io/peraperaquest/PeraPeraQuest
+        flavor: |
+          latest=auto
+        tags: |
+          type=semver,pattern={{version}}
+          type=semver,pattern={{major}}.{{minor}}
+          type=semver,pattern={{major}}
 
-    - name: Cache Godot Export Templates
-      id: cache-templates
-      uses: actions/cache@v4
+    - name: Login to GitHub Container Registry
+      uses: docker/login-action@v1
       with:
-        path: ~/.local/share/godot/export_templates
-        key: ${{ runner.os }}-godot-templates-${{ hashFiles('dependencies.sh') }}
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Install Godot
-      run: |
-        tools/ci/install_godot
-
-    - name: Add Godot Engine to PATH
-      run: |
-        echo "${HOME}" >> $GITHUB_PATH
-
-    - name: Export Project to Web
-      run: tools/ci/export_web
+    - name: Publish Docker Image
+      uses: docker/build-push-action@v4
+      with:
+        context: .
+        tags: ${{ steps.docker_meta.outputs.tags }}
+        labels: ${{ steps.docker_meta.outputs.labels }}
+        push: true

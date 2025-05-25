@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+# run-docker
+
+# run the PeraPeraQuest service in a container
+docker run \
+    --detach \
+    --name=PeraPeraQuest \
+    --publish 8080:80 \
+    --rm \
+    peraperaquest:latest

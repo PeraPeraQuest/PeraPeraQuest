@@ -1,0 +1,10 @@
+# .dockerignore
+# Tell Docker to ignore these files when building container images
+
+.github
+.godot
+export
+.dockerignore
+.editorconfig
+.gitattributes
+.gitignore

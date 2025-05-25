@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+# build-docker
+
+# create a unique(-ish) build tag for this build
+BUILD_TAG="$(date +%Y%m%d%H%M%S)"
+
+# build PeraPeraQuest, and tag it as peraperaquest:BUILD_TAG
+docker buildx build $@ \
+    --file Dockerfile \
+    --tag peraperaquest:${BUILD_TAG} \
+    .
+
+# since we just built PeraPeraQuest, tag it again as peraperaquest:latest
+docker image tag peraperaquest:${BUILD_TAG} peraperaquest:latest
