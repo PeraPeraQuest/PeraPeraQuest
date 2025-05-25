@@ -9,8 +9,18 @@ on:
       - main
 
 jobs:
+  build:
+    name: Build Docker Container
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/build-push-action@v4
+        with:
+          context: .
+          push: false
+
   export:
-    name: Export (Web)
+    name: Godot Export (Web)
     runs-on: ubuntu-latest
 
     steps:
