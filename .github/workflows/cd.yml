@@ -5,6 +5,10 @@ on:
     tags:
       - '**'
 
+permissions:
+  contents: read
+  packages: write
+
 jobs:
   publish:
     name: "Publish Docker Image"
