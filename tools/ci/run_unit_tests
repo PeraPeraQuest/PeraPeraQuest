@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# run_unit_tests
+set -euo pipefail
+
+${HOME}/godot --debug -s addons/gut/gut_cmdln.gd -gdir=res://test/unit,res://test/integration -gexit

@@ -19,6 +19,33 @@ jobs:
           context: .
           push: false
 
+  lint:
+    name: Lint Godot Project
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: tools/ci/lint
+
+  test:
+    name: Run Godot Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Cache Godot Engine
+        id: cache-engine
+        uses: actions/cache@v4
+        with:
+          path: ~/godot
+          key: ${{ runner.os }}-godot-engine-${{ hashFiles('dependencies.sh') }}
+
+      - name: Install Godot
+        run: tools/ci/install_godot
+
+      - name: Run Godot Unit Tests
+        run: tools/ci/run_unit_tests
+
   export:
     name: Godot Export (Web)
     runs-on: ubuntu-latest
