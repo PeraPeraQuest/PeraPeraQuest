@@ -2,4 +2,10 @@
 # run_unit_tests
 set -euo pipefail
 
+# prevent: ERROR: Failed loading resource: --- Make sure resources have been imported by opening the project in the editor at least once.
+echo "Importing project"
+${HOME}/godot --headless --import --path .
+
+# now we run our unit tests
+echo "Running Godot Unit Tests"
 ${HOME}/godot --debug --headless -s addons/gut/gut_cmdln.gd -gdir=res://test/unit,res://test/integration -gexit

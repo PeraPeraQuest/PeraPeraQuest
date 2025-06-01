@@ -40,6 +40,13 @@ jobs:
           path: ~/godot
           key: ${{ runner.os }}-godot-engine-${{ hashFiles('dependencies.sh') }}
 
+      - name: Cache Godot Export Templates
+        id: cache-templates
+        uses: actions/cache@v4
+        with:
+          path: ~/.local/share/godot/export_templates
+          key: ${{ runner.os }}-godot-templates-${{ hashFiles('dependencies.sh') }}
+
       - name: Install Godot
         run: tools/ci/install_godot
 
@@ -69,12 +76,10 @@ jobs:
         key: ${{ runner.os }}-godot-templates-${{ hashFiles('dependencies.sh') }}
 
     - name: Install Godot
-      run: |
-        tools/ci/install_godot
+      run: tools/ci/install_godot
 
     - name: Add Godot Engine to PATH
-      run: |
-        echo "${HOME}" >> $GITHUB_PATH
+      run: echo "${HOME}" >> $GITHUB_PATH
 
     - name: Export Project to Web
       run: tools/ci/export_web
