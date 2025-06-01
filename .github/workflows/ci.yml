@@ -19,6 +19,40 @@ jobs:
           context: .
           push: false
 
+  lint:
+    name: Lint Godot Project
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: tools/ci/lint
+
+  test:
+    name: Run Godot Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Cache Godot Engine
+        id: cache-engine
+        uses: actions/cache@v4
+        with:
+          path: ~/godot
+          key: ${{ runner.os }}-godot-engine-${{ hashFiles('dependencies.sh') }}
+
+      - name: Cache Godot Export Templates
+        id: cache-templates
+        uses: actions/cache@v4
+        with:
+          path: ~/.local/share/godot/export_templates
+          key: ${{ runner.os }}-godot-templates-${{ hashFiles('dependencies.sh') }}
+
+      - name: Install Godot
+        run: tools/ci/install_godot
+
+      - name: Run Godot Unit Tests
+        run: tools/ci/run_unit_tests
+
   export:
     name: Godot Export (Web)
     runs-on: ubuntu-latest
@@ -42,12 +76,10 @@ jobs:
         key: ${{ runner.os }}-godot-templates-${{ hashFiles('dependencies.sh') }}
 
     - name: Install Godot
-      run: |
-        tools/ci/install_godot
+      run: tools/ci/install_godot
 
     - name: Add Godot Engine to PATH
-      run: |
-        echo "${HOME}" >> $GITHUB_PATH
+      run: echo "${HOME}" >> $GITHUB_PATH
 
     - name: Export Project to Web
       run: tools/ci/export_web

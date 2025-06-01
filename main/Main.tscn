@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://bjey5midgd23c"]
+[gd_scene load_steps=3 format=3 uid="uid://bjey5midgd23c"]
 
 [ext_resource type="Texture2D" uid="uid://m5jcvo2oncsg" path="res://main/coming-soon-logo.png" id="1_qv31u"]
+[ext_resource type="Script" uid="uid://687jl7vfcpp5" path="res://scripts/login_manager.gd" id="1_wbnyf"]
 
 [node name="Main" type="Control"]
 layout_mode = 3
@@ -9,6 +10,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_wbnyf")
 
 [node name="TextureRect" type="TextureRect" parent="."]
 layout_mode = 1

@@ -3,7 +3,6 @@
 
 # run the PeraPeraQuest service in a container
 docker run \
-    --detach \
     --name=game \
     --publish 8080:8080 \
     --rm \

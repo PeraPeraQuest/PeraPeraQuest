@@ -1,0 +1,60 @@
+#!/usr/bin/env bash
+# lint
+set -euo pipefail
+
+errors=0
+
+echo "🔍  Lint: Checking for binary scene files (*.scn)"
+scn_files=$(find . -type f -name "*.scn")
+if [[ -n "$scn_files" ]]; then
+  echo -e "\n✖ Error: Found binary scene file(s):"
+  echo "$scn_files"
+  echo "  → Godot’s text-based scenes use *.tscn. Convert or remove these before committing."
+  errors=$((errors+1))
+fi
+
+echo "🔍  Lint: Checking for import cache directories (.import/)"
+import_dirs=$(find . -type d -name ".import")
+if [[ -n "$import_dirs" ]]; then
+  echo -e "\n✖ Error: Found engine import cache dirs:"
+  echo "$import_dirs"
+  echo "  → Add /.import/ to your .gitignore and remove these from version control."
+  errors=$((errors+1))
+fi
+
+echo "🔍  Lint: Checking for macOS artifacts (.DS_Store)"
+ds_store=$(find . -type f -name ".DS_Store")
+if [[ -n "$ds_store" ]]; then
+  echo -e "\n✖ Error: Found .DS_Store files:"
+  echo "$ds_store"
+  errors=$((errors+1))
+fi
+
+echo "🔍  Lint: Checking for trailing whitespace"
+trailing=$(grep -RIn "[[:blank:]]$" --exclude-dir=".git" . || true)
+if [[ -n "$trailing" ]]; then
+  echo -e "\n✖ Error: Trailing whitespace detected:"
+  echo "$trailing"
+  errors=$((errors+1))
+fi
+
+echo "🔍  Lint: Checking for files with spaces in their names"
+spaces=$(find . -type f -name "* *")
+if [[ -n "$spaces" ]]; then
+  echo -e "\n✖ Error: Found files with spaces in their names:"
+  echo "$spaces"
+  errors=$((errors+1))
+fi
+
+echo "🔍  Lint: Verifying project.godot exists"
+if [[ ! -f "project.godot" ]]; then
+  echo -e "\n✖ Error: project.godot not found in repo root."
+  errors=$((errors+1))
+fi
+
+if [[ "$errors" -gt 0 ]]; then
+  echo -e "\n🚨 Lint failed with $errors error(s)."
+  exit 1
+else
+  echo -e "\n✅ All lint checks passed."
+fi
